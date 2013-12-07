@@ -59,12 +59,16 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function plugin_setup() {
 
-		// delete transient cache, if active on the must use plugin list in network view
+		// Inlcude all plugins in subdirectories
+		$this->include_subdir_plugins();
+
+		// Delete transient cache, if active on the must use plugin list in network view
 		add_action( 'load-plugins.php', array( $this, 'delete_subdir_mu_plugin_cache' ) );
 
-		// add row and content for all plugins, there include via this plugin
+		// Add row and content for all plugins, there include via this plugin
 		add_action( 'after_plugin_row_mustuse-loader.php', array( $this, 'view_subdir_mu_plugins' ) );
 	}
+
 
 	/**
 	 * Get all plugins in subdirectories
@@ -77,6 +81,7 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		// Cache plugins
 		$plugins = get_site_transient( 'subdir_wpmu_plugins' );
+
 		// Deactivate caching on active debug
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG )
 			$plugins = FALSE;
@@ -121,9 +126,21 @@ class Must_Use_Plugins_Subdir_Loader {
 	}
 
 	/**
+	 * Include all plugins from subdirectories
+	 *
+	 * @since   0.0.1
+	 * @return  void
+	 */
+	public function include_subdir_plugins() {
+		// Include all plugins in subdirectories
+		foreach ( $this->subdir_mu_plugins_files() as $plugin_file )
+			require_once( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+	}
+
+	/**
 	 * Delete the transient cache, if on the Must Use plugin list on network view
 	 *
-	 * @since  0.0.1
+	 * @since   0.0.1
 	 * @return  void
 	 */
 	public function delete_subdir_mu_plugin_cache() {
@@ -137,10 +154,6 @@ class Must_Use_Plugins_Subdir_Loader {
 			&& 'plugin_status=mustuse' === $_SERVER['QUERY_STRING']
 			)
 			delete_site_transient( 'subdir_wpmu_plugins' );
-
-		// Include all plugins in subdirectories
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file )
-			require_once( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 	}
 
 	/**
