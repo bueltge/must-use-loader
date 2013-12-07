@@ -10,7 +10,7 @@
  *
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
- * Description: Load Must-Use Plugins inside subdirectories
+ * Description: Load Must-Use Plugins inside subdirectories with caching. Delete the cache, if you view the Must Use plugin list in the network administration.
  * Version:     0.0.1
  * Author:      Frank Bültge
  * Author URI:  http://bueltge.de
@@ -60,7 +60,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	public function plugin_setup() {
 
 		// delete transient cache, if active on the must use plugin list in network view
-		$this->delete_subdir_mu_plugin_cache();
+		add_action( 'load-plugins.php', array( $this, 'delete_subdir_mu_plugin_cache' ) );
 
 		// add row and content for all plugins, there include via this plugin
 		add_action( 'after_plugin_row_mustuse-loader.php', array( $this, 'view_subdir_mu_plugins' ) );
@@ -128,14 +128,19 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function delete_subdir_mu_plugin_cache() {
 
-		// delete cache when viewing plugins page in /wp-admin/
-		if ( isset( $_SERVER['REQUEST_URI'] ) &&
-			 strpos( FALSE !== $_SERVER['REQUEST_URI'], '/wp-admin/network/plugins.php' ) )
-			delete_site_transient('subdir_wpmu_plugins');
+		// get screen information
+		$screen = get_current_screen();
 
-		// Reinclude all plugins in subdirectories
+		// Delete cache when viewing plugins page in /wp-admin/
+		if ( 'plugins-network' === $screen->id
+			&& isset( $_SERVER['QUERY_STRING'] )
+			&& 'plugin_status=mustuse' === $_SERVER['QUERY_STRING']
+			)
+			delete_site_transient( 'subdir_wpmu_plugins' );
+
+		// Include all plugins in subdirectories
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file )
-			require WPMU_PLUGIN_DIR . '/' . $plugin_file;
+			require_once( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 	}
 
 	/**
@@ -147,7 +152,6 @@ class Must_Use_Plugins_Subdir_Loader {
 	public function view_subdir_mu_plugins() {
 
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
-			// Strip down version of WP_Plugins_List_Table
 
 			$data = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 
@@ -169,7 +173,9 @@ class Must_Use_Plugins_Subdir_Loader {
 				</td>
 				<td class="column-description desc">
 					<div class="plugin-description"><p><?php echo $desc; ?></p></div>
-					<div class="active second plugin-version-author-uri"><?php printf( __( 'Version %s | By %s %s' ), $version, $author, $plugin_site ) ; ?></div>
+					<div class="active second plugin-version-author-uri">
+						<?php printf( esc_attr__( 'Version %s | By %s %s' ), $version, $author, $plugin_site ) ; ?>
+					</div>
 				</td>
 			</tr>
 
