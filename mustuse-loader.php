@@ -101,7 +101,7 @@ class Must_Use_Plugins_Subdir_Loader {
 
 			// Invalid cache
 			$plugins = array();
-			// Relative path to single plugin folder.
+			// Relative path to single plugin directory
 			$mu_plugins_folder = explode( '/', WPMU_PLUGIN_DIR );
 			// Use last value
 			$mu_plugins_folder = end( $mu_plugins_folder );
@@ -173,7 +173,7 @@ class Must_Use_Plugins_Subdir_Loader {
 				</td>
 			</tr>
 
-		<?php
+			<?php
 		}
 	}
 
