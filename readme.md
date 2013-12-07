@@ -16,11 +16,11 @@ The WordPress Must Use Plugins is an fine way to include without doings in back 
 ## Custom Must Use Plugin directory
 Define it in the `wp-config.php` of your install, like the follow source.
 
-	```php
-	// Custom mu plugin directory
-	define( 'WPMU_PLUGIN_DIR', dirname( __FILE__ ) . '/wpmu-plugins' );
-	define( 'WPMU_PLUGIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wpmu-plugins' );
-	```
+```php
+// Custom mu plugin directory
+define( 'WPMU_PLUGIN_DIR', dirname( __FILE__ ) . '/wpmu-plugins' );
+define( 'WPMU_PLUGIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wpmu-plugins' );
+```
 
 ## Other Notes
 ### Bugs, technical hints or contribute
