@@ -25,7 +25,7 @@ Define it in the `wp-config.php` of your install, like the follow source.
 ## Other Notes
 ### Bugs, technical hints or contribute
 Please give me feedback, contribute and file technical bugs on this 
-[GitHub Repo](https://github.com/bueltge/WordPress-Admin-Style), use Issues.
+[GitHub Repo](https://github.com/bueltge/Must-Use-Loader), use Issues.
 
 ### License
 Good news, this plugin is free for everyone! Since it's released under the GPL, 
