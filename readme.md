@@ -13,6 +13,14 @@ The WordPress Must Use Plugins is an fine way to include without doings in back 
  3. Alternative define your Must Use folder in the `wp-config.php` and copy the plugin in this folder
  4. Check in the network plugin page, if it works
 
+#### Alternative via Git
+ 1. Go to your Must Use folder `cd path`
+ 2. `git init .`
+ 3. `git remote add origin https://github.com/bueltge/Must-Use-Loader.git`
+ 4. `git fetch origin`
+ 5. `git checkout master`
+ 6. Check in the network plugin page, if it works
+
 ## Custom Must Use Plugin directory
 Define it in the `wp-config.php` of your install, like the follow source.
 
@@ -36,7 +44,7 @@ for the time I've spent writing and supporting this plugin.
 And I really don't want to know how many hours of my life this plugin has already eaten ;)
 
 ### Contact & Feedback
-The plugin is designed and developed by me ([Frank Bültge](http://bueltge.de))
+The plugin is designed and developed by me ([Frank Bültge](http://bueltge.de)), [G+ Page](https://plus.google.com/111291152590065605567/about?rel=author)
 
 Please let me know if you like the plugin or you hate it or whatever ... 
 Please fork it, add an issue for ideas and bugs.
