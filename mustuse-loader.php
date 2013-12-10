@@ -6,12 +6,12 @@
  *
  * @package Must-Use Loader
  * @author  Frank Bültge
- * @version 12/07/2013
+ * @version 12/10/2013
  *
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
  * Description: Load Must-Use Plugins inside subdirectories with caching. Delete the cache, if you view the Must Use plugin list in the network administration.
- * Version:     0.0.1
+ * Version:     0.0.2
  * Author:      Frank Bültge
  * Author URI:  http://bueltge.de
  * License:     GPL-2.0+
@@ -39,6 +39,16 @@ add_action( 'muplugins_loaded',
 class Must_Use_Plugins_Subdir_Loader {
 
 	/**
+	 * If the plugin fails to find your wpmu plugin directory,
+	 * add this path via variable
+	 * Optional, Relative path to single plugin folder.
+	 *
+	 * @since  0.0.2
+	 * @var    bool | string
+	 */
+	private static $wpmu_plugin_dir = FALSE;
+
+	/**
 	 * Handler for the action 'init'. Instantiates this class.
 	 *
 	 * @since  0.0.1
@@ -56,10 +66,12 @@ class Must_Use_Plugins_Subdir_Loader {
 
 	/**
 	 * Used for the doing of the plugin
+	 *
+	 * @since  0.0.1
 	 */
 	public function plugin_setup() {
 
-		// Inlcude all plugins in subdirectories
+		// Include all plugins in subdirectories
 		$this->include_subdir_plugins();
 
 		// Delete transient cache, if active on the must use plugin list in network view
@@ -106,12 +118,17 @@ class Must_Use_Plugins_Subdir_Loader {
 
 			// Invalid cache
 			$plugins = array();
-			// Relative path to single plugin directory
-			$mu_plugins_folder = explode( '/', WPMU_PLUGIN_DIR );
-			// Use last value
-			$mu_plugins_folder = end( $mu_plugins_folder );
+
+			// Check for the optional defined var of the class
+			if ( ! self::$wpmu_plugin_dir ) {
+				// Relative path to single plugin directory
+				$mu_plugins_folder = explode( '/', WPMU_PLUGIN_DIR );
+				// Use last value
+				self::$wpmu_plugin_dir = '/../' . end( $mu_plugins_folder );
+			}
+
 			// Get all plugins
-			$mu_plugins = get_plugins( '/../' . $mu_plugins_folder );
+			$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
 
 			foreach ( $mu_plugins as $plugin_file => $data ) {
 				// skip files directly at root
