@@ -47,7 +47,16 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @var    bool | string
 	 */
 	private static $wpmu_plugin_dir = FALSE;
-
+	
+	/**
+	 * Store for the custom count to add this to the global of WP
+	 * 
+	 * @since  01/09/2014
+	 * @var    integer
+	 */
+	public $mustuse_total = 0;
+	
+	
 	/**
 	 * Handler for the action 'init'. Instantiates this class.
 	 *
@@ -73,10 +82,16 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		// Include all plugins in subdirectories
 		$this->include_subdir_plugins();
-
+		
 		// Delete transient cache, if active on the must use plugin list in network view
 		add_action( 'load-plugins.php', array( $this, 'delete_subdir_mu_plugin_cache' ) );
-
+		
+		// Count must use plugins in subdirectory
+		add_action( 'load-plugins.php', array( $this, 'count_subdir_plugins' ), 10 );
+		
+		// Change the plugin view value
+		add_action( 'admin_footer-plugins.php', array( $this, 'change_view_values' ), 11 );
+		
 		// Add row and content for all plugins, there include via this plugin
 		add_action( 'after_plugin_row_mustuse-loader.php', array( $this, 'view_subdir_mu_plugins' ) );
 	}
@@ -149,6 +164,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @return  void
 	 */
 	public function include_subdir_plugins() {
+		
 		// Include all plugins in subdirectories
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file )
 			require_once( WPMU_PLUGIN_DIR . '/' . $plugin_file );
@@ -172,7 +188,58 @@ class Must_Use_Plugins_Subdir_Loader {
 			)
 			delete_site_transient( 'subdir_wpmu_plugins' );
 	}
-
+	
+	/**
+	 * Change total count for must use values
+	 * 
+	 * @since   01/09/2014
+	 * @return  void
+	 */
+	public function change_view_values() {
+		
+		$current_screen = get_current_screen();
+		if ( 'plugins-network' !== $current_screen->id )
+			return;
+		
+		$item = sprintf( _n( 'item', 'items', $this->mustuse_total ), number_format_i18n( $this->mustuse_total ) );
+		?>
+		<script type="text/javascript">
+			jQuery( document ).ready( function( $ ) {
+				var text,
+				    value,
+				    mustuse;
+				
+				// replace the brackets and set int value
+				text  = $( '.mustuse span' ).text();
+				value = text.replace( '(', '' );
+				value = parseInt( value.replace( ')', '' ) );
+				
+				// replace and add strings
+				mustuse = value + <?php echo (int) $this->mustuse_total; ?>;
+				$( '.mustuse span' ).replaceWith( '(' + mustuse + ')' );
+				mustuse = mustuse + ' <?php echo $item; ?>';
+				console.log( document.URL.search( /mustuse/ ) );
+				if ( document.URL.search( /plugin_status=mustuse/ ) != -1 )
+					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
+			} );
+		</script>
+		<?php
+	}
+	
+	/**
+	 * Count must use plugins in subdirectory
+	 * 
+	 * @since   01/09/2014
+	 * @return  void
+	 */
+	public function count_subdir_plugins() {
+		
+		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
+			
+			$this->mustuse_total ++;
+		}
+	}
+	
 	/**
 	 * Add rows for each sub-plugin under this plugin when listing mu-plugins in wp-admin
 	 *
@@ -180,9 +247,9 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @return  void
 	 */
 	public function view_subdir_mu_plugins() {
-
+		
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
-
+			
 			$data = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 
 			$name        = empty( $data['Name'] ) ? '?' : $data['Name'];
