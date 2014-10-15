@@ -11,7 +11,7 @@
  * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
  * Version:     1.0.1
  * Author:      Frank Bültge
- * Author URI: http://bueltge.de
+ * Author URI:  http://bueltge.de
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
