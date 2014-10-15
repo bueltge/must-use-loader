@@ -333,7 +333,7 @@ class Must_Use_Plugins_Subdir_Loader {
 						); ?></strong>
 				</td>
 				<td class="column-description desc">
-					<div class="plugin-description"><p><?php _e( $plugin_data[ 'Description' ] ); ?></p></div>
+					<div class="plugin-description"><p><?php echo( $plugin_data[ 'Description' ] ); ?></p></div>
 					<div class="active second plugin-version-author-uri">
 						<?php printf(
 							esc_attr__( 'Version %s | By %s %s' ),
