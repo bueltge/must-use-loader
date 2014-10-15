@@ -307,9 +307,11 @@ class Must_Use_Plugins_Subdir_Loader {
 			return $data;
 		}
 
-		return '| <a href="' . esc_url( $data ) . '">' . __(
+		$plugin_uri = '| <a href="' . esc_url( $data ) . '">' . __(
 			'Visit plugin site'
 		) . '</a>';
+
+		return $plugin_uri;
 	}
 
 	/**
@@ -331,8 +333,8 @@ class Must_Use_Plugins_Subdir_Loader {
 				'code'    => true,
 				'em'      => true,
 				'strong'  => true,
+				'a'       => array( 'href' => true, 'title' => true ),
 			);
-			$allowed_tags['a'] = array( 'href' => true, 'title' => true );
 			?>
 
 			<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
