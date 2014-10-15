@@ -307,7 +307,7 @@ class Must_Use_Plugins_Subdir_Loader {
 			return $data;
 		}
 
-		return '| <a href="' . $data . '">' . __(
+		return '| <a href="' . esc_url( $data ) . '">' . __(
 			'Visit plugin site'
 		) . '</a>';
 	}
@@ -323,21 +323,31 @@ class Must_Use_Plugins_Subdir_Loader {
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
 
 			$plugin_data = $this->filter_plugin_data( $plugin_file );
+
+			// Sanitize fields
+			$allowed_tags = array(
+				'abbr'    => array( 'title' => true ),
+				'acronym' => array( 'title' => true ),
+				'code'    => true,
+				'em'      => true,
+				'strong'  => true,
+			);
+			$allowed_tags['a'] = array( 'href' => true, 'title' => true );
 			?>
 
 			<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
 				<th scope="row" class="check-column"></th>
 				<td class="plugin-title">
-					<strong title="<?php echo esc_attr( $plugin_file ); ?>"><?php esc_attr_e(
-							$plugin_data[ 'Name' ]
+					<strong title="<?php echo esc_attr( $plugin_file ); ?>"><?php echo wp_kses(
+							$plugin_data[ 'Name' ], $allowed_tags
 						); ?></strong>
 				</td>
 				<td class="column-description desc">
-					<div class="plugin-description"><p><?php echo( $plugin_data[ 'Description' ] ); ?></p></div>
+					<div class="plugin-description"><p><?php echo wp_kses( $plugin_data[ 'Description' ], $allowed_tags ); ?></p></div>
 					<div class="active second plugin-version-author-uri">
 						<?php printf(
 							esc_attr__( 'Version %s | By %s %s' ),
-							$plugin_data[ 'Version' ],
+							wp_kses( $plugin_data[ 'Version' ], $allowed_tags ),
 							$plugin_data[ 'Author' ],
 							$this->format_plugin_uri( $plugin_data[ 'PluginURI' ] )
 						); ?>
