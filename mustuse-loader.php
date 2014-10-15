@@ -271,59 +271,48 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * Filter Plugin data for view on must use list
 	 *
 	 * @since  2014-10-15
+	 *
 	 * @param  $plugin_file
+	 *
 	 * @return array
 	 */
 	public function filter_plugin_data( $plugin_file ) {
 
-		$data = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+		$defaults = array(
+			'Name'        => '?',
+			'Description' => '&nbsp;',
+			'Version'     => '',
+			'AuthorName'  => '',
+			'Author'      => '',
+			'PluginURI'   => '',
+		);
 
-		$plugin_data = array();
-		$plugin_data[ 'name' ]        = empty( $data[ 'Name' ] ) ? '?' : $data[ 'Name' ];
-		$plugin_data[ 'desc' ]        = empty( $data[ 'Description' ] ) ? '&nbsp;' : $data[ 'Description' ];
-		$plugin_data[ 'version' ]     = empty( $data[ 'Version' ] ) ? '' : $data[ 'Version' ];
-		$plugin_data[ 'author_name' ] = empty( $data[ 'AuthorName' ] ) ? '' : $data[ 'AuthorName' ];
-		$plugin_data[ 'author' ]      = empty( $data[ 'Author' ] ) ? $plugin_data[ 'author_name' ] : $data[ 'Author' ];
-		$plugin_data[ 'plugin_site' ] = empty( $data[ 'PluginURI' ] )
-			? ''
-			: '| <a href="' . $data[ 'PluginURI' ] . '">' . __(
-				'Visit plugin site'
-			) . '</a>';
+		$data        = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+		$plugin_data = wp_parse_args( $data, $defaults );
 
 		return $plugin_data;
 	}
 
 	/**
-	 * Echo markup on list of each plugin
+	 * Format the plugin uri
 	 *
 	 * @since  2014-10-15
-	 * @param  $plugin_file
+	 *
+	 * @param  $data
+	 *
+	 * @return string
 	 */
-	public function plugin_template( $plugin_file ) {
+	public function format_plugin_uri( $data ) {
 
-		$plugin_data = $this->filter_plugin_data( $plugin_file );
-		?>
+		if ( empty( $data ) ) {
+			return $data;
+		}
 
-		<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
-			<th scope="row" class="check-column"></th>
-			<td class="plugin-title">
-				<strong title="<?php echo esc_attr( $plugin_file ); ?>"><?php esc_attr_e( $plugin_data[ 'name' ] ); ?></strong>
-			</td>
-			<td class="column-description desc">
-				<div class="plugin-description"><p><?php _e( $plugin_data[ 'desc' ] ); ?></p></div>
-				<div class="active second plugin-version-author-uri">
-					<?php printf(
-						esc_attr__( 'Version %s | By %s %s' ),
-						$plugin_data[ 'version' ],
-						$plugin_data[ 'author' ],
-						$plugin_data[ 'plugin_site' ]
-					); ?>
-				</div>
-			</td>
-		</tr>
-
-	<?php
+		return '| <a href="' . $data . '">' . __(
+			'Visit plugin site'
+		) . '</a>';
 	}
+
 	/**
 	 * Add rows for each sub-plugin under this plugin when listing mu-plugins in wp-admin
 	 *
@@ -334,7 +323,30 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
 
-			$this->plugin_template( $plugin_file );
+			$plugin_data = $this->filter_plugin_data( $plugin_file );
+			?>
+
+			<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
+				<th scope="row" class="check-column"></th>
+				<td class="plugin-title">
+					<strong title="<?php echo esc_attr( $plugin_file ); ?>"><?php esc_attr_e(
+							$plugin_data[ 'Name' ]
+						); ?></strong>
+				</td>
+				<td class="column-description desc">
+					<div class="plugin-description"><p><?php _e( $plugin_data[ 'Description' ] ); ?></p></div>
+					<div class="active second plugin-version-author-uri">
+						<?php printf(
+							esc_attr__( 'Version %s | By %s %s' ),
+							$plugin_data[ 'Version' ],
+							$plugin_data[ 'Author' ],
+							$this->format_plugin_uri( $plugin_data[ 'PluginURI' ] )
+						); ?>
+					</div>
+				</td>
+			</tr>
+
+		<?php
 		}
 	}
 
