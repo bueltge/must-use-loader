@@ -1,19 +1,17 @@
 <?php
 /**
- * The WordPress Must Use Plugins is an fine way to include without doings in back end
+ * The WordPress Must Use Plugins is an fine way to
+ *   include without doings in back end
  * But WordPress include only files, check no subdirectories
- * This small plugin include all plugins in subdirectories from Must Use plugin folder
- *
- * @package Must-Use Loader
- * @author  Frank Bültge
- * @version 12/10/2013
+ * This small plugin include all plugins in subdirectories
+ *   from Must Use plugin folder
  *
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
- * Description: Load Must-Use Plugins inside subdirectories with caching. Delete the cache, if you view the Must Use plugin list in the network administration.
- * Version:     1.0.0
+ * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
+ * Version:     1.0.1
  * Author:      Frank Bültge
- * Author URI:  http://bueltge.de
+ * Author URI: http://bueltge.de
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -26,9 +24,11 @@ if ( ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-add_action( 'muplugins_loaded',
+add_action(
+	'muplugins_loaded',
 	array( Must_Use_Plugins_Subdir_Loader::get_instance(), 'plugin_setup' )
 );
+
 /**
  * Class Must_Use_Plugins_Subdir_Loader
  *
@@ -47,16 +47,15 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @var    bool | string
 	 */
 	private static $wpmu_plugin_dir = FALSE;
-	
+
 	/**
 	 * Store for the custom count to add this to the global of WP
-	 * 
+	 *
 	 * @since  01/09/2014
 	 * @var    integer
 	 */
 	public $mustuse_total = 0;
-	
-	
+
 	/**
 	 * Handler for the action 'init'. Instantiates this class.
 	 *
@@ -67,8 +66,9 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		static $instance;
 
-		if ( NULL === $instance )
+		if ( NULL === $instance ) {
 			$instance = new self();
+		}
 
 		return $instance;
 	}
@@ -82,20 +82,45 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		// Include all plugins in subdirectories
 		$this->include_subdir_plugins();
-		
+
 		// Delete transient cache, if active on the must use plugin list in network view
 		add_action( 'load-plugins.php', array( $this, 'delete_subdir_mu_plugin_cache' ) );
-		
+
 		// Count must use plugins in subdirectory
 		add_action( 'load-plugins.php', array( $this, 'count_subdir_plugins' ), 10 );
-		
+
 		// Change the plugin view value
 		add_action( 'admin_footer-plugins.php', array( $this, 'change_view_values' ), 11 );
-		
+
 		// Add row and content for all plugins, there include via this plugin
-		add_action( 'after_plugin_row_mustuse-loader.php', array( $this, 'view_subdir_mu_plugins' ) );
+		add_action( 'after_plugin_row_mustuse-loader.php', array( $this, 'list_subdir_mu_plugins' ) );
 	}
 
+	/**
+	 * Validate the plugins from cache, that still real exist
+	 *
+	 * @since  2014-10-15
+	 *
+	 * @param  $plugins
+	 *
+	 * @return bool
+	 */
+	public function validate_plugins( $plugins ) {
+
+		if ( ! isset( $plugins ) || ! is_array( $plugins ) ) {
+			return $plugins;
+		}
+
+		foreach ( $plugins as $plugin_file ) {
+			// Validate plugins still exist
+			if ( ! is_readable( WPMU_PLUGIN_DIR . '/' . $plugin_file ) ) {
+				$plugins = FALSE;
+				break;
+			}
+		}
+
+		return $plugins;
+	}
 
 	/**
 	 * Get all plugins in subdirectories
@@ -110,26 +135,21 @@ class Must_Use_Plugins_Subdir_Loader {
 		$plugins = get_site_transient( 'subdir_wpmu_plugins' );
 
 		// Deactivate caching on active debug
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG )
+		if ( defined( 'WP_DEBUG1' ) && WP_DEBUG1 ) {
 			$plugins = FALSE;
+		}
 
 		if ( FALSE !== $plugins ) {
-
-			foreach ( $plugins as $plugin_file ) {
-				// Validate plugins still exist
-				if ( ! is_readable( WPMU_PLUGIN_DIR . '/' . $plugin_file ) ) {
-					$plugins = FALSE;
-					break;
-				}
-			}
+			$this->validate_plugins( $plugins );
 		}
 
 		// No caching, then load
-		if ( FALSE === $plugins) {
+		if ( FALSE === $plugins ) {
 
 			// get_plugins is not included by default
-			if ( ! function_exists( 'get_plugins') )
+			if ( ! function_exists( 'get_plugins' ) ) {
 				require ABSPATH . 'wp-admin/includes/plugin.php';
+			}
 
 			// Invalid cache
 			$plugins = array();
@@ -145,10 +165,12 @@ class Must_Use_Plugins_Subdir_Loader {
 			// Get all plugins
 			$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
 
-			foreach ( $mu_plugins as $plugin_file => $data ) {
+			// array_keys() is ugly and a performance impact
+			foreach ( $mu_plugins as $plugin_file => $not_used ) {
 				// skip files directly at root
-				if ( '.' !== dirname( $plugin_file ) )
-					$plugins[] = $plugin_file;
+				if ( '.' !== dirname( $plugin_file ) ) {
+					$plugins[ ] = $plugin_file;
+				}
 			}
 			// Set cache for subdirectory plugins
 			set_site_transient( 'subdir_wpmu_plugins', $plugins );
@@ -164,10 +186,12 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @return  void
 	 */
 	public function include_subdir_plugins() {
-		
+
 		// Include all plugins in subdirectories
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file )
+		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
 			require_once( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+			wp_register_plugin_realpath( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+		}
 	}
 
 	/**
@@ -183,100 +207,134 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		// Delete cache when viewing plugins page in /wp-admin/
 		if ( 'plugins-network' === $screen->id
-			&& isset( $_SERVER['QUERY_STRING'] )
-			&& 'plugin_status=mustuse' === $_SERVER['QUERY_STRING']
-			)
+			&& isset( $_SERVER[ 'QUERY_STRING' ] )
+			&& 'plugin_status=mustuse' === $_SERVER[ 'QUERY_STRING' ]
+		) {
 			delete_site_transient( 'subdir_wpmu_plugins' );
+		}
 	}
-	
+
 	/**
 	 * Change total count for must use values
-	 * 
+	 *
 	 * @since   01/09/2014
 	 * @return  void
 	 */
 	public function change_view_values() {
-		
+
 		$current_screen = get_current_screen();
-		if ( 'plugins-network' !== $current_screen->id )
+		if ( 'plugins-network' !== $current_screen->id ) {
 			return;
-		
+		}
+
 		$item = sprintf( _n( 'item', 'items', $this->mustuse_total ), number_format_i18n( $this->mustuse_total ) );
 		?>
 		<script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
 				var text,
-				    value,
-				    mustuse;
-				
+					value,
+					mustuse,
+					selector;
+
 				// replace the brackets and set int value
-				text  = $( '.mustuse span' ).text();
+				selector = '.mustuse span';
+				text = $( selector ).text();
 				value = text.replace( '(', '' );
 				value = parseInt( value.replace( ')', '' ) );
-				
+
 				// replace and add strings
-				mustuse = value + <?php echo (int) $this->mustuse_total; ?>;
-				$( '.mustuse span' ).replaceWith( '(' + mustuse + ')' );
-				mustuse = mustuse + ' <?php echo $item; ?>';
+				mustuse = value + <?php echo intval( $this->mustuse_total ); ?>;
+				$( selector ).replaceWith( '(' + mustuse + ')' );
+				mustuse = mustuse + ' <?php echo esc_attr( $item ); ?>';
 				console.log( document.URL.search( /mustuse/ ) );
-				if ( document.URL.search( /plugin_status=mustuse/ ) != -1 )
+				if ( document.URL.search( /plugin_status=mustuse/ ) != -1 ) {
 					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
+				}
 			} );
 		</script>
-		<?php
+	<?php
 	}
-	
+
 	/**
 	 * Count must use plugins in subdirectory
-	 * 
+	 * Set var with integer value
+	 *
 	 * @since   01/09/2014
 	 * @return  void
 	 */
 	public function count_subdir_plugins() {
-		
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
-			
-			$this->mustuse_total ++;
-		}
+
+		$this->mustuse_total = (int) count( $this->subdir_mu_plugins_files() );
 	}
-	
+
+	/**
+	 * Filter Plugin data for view on must use list
+	 *
+	 * @since  2014-10-15
+	 * @param  $plugin_file
+	 * @return array
+	 */
+	public function filter_plugin_data( $plugin_file ) {
+
+		$data = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+
+		$plugin_data = array();
+		$plugin_data[ 'name' ]        = empty( $data[ 'Name' ] ) ? '?' : $data[ 'Name' ];
+		$plugin_data[ 'desc' ]        = empty( $data[ 'Description' ] ) ? '&nbsp;' : $data[ 'Description' ];
+		$plugin_data[ 'version' ]     = empty( $data[ 'Version' ] ) ? '' : $data[ 'Version' ];
+		$plugin_data[ 'author_name' ] = empty( $data[ 'AuthorName' ] ) ? '' : $data[ 'AuthorName' ];
+		$plugin_data[ 'author' ]      = empty( $data[ 'Author' ] ) ? $plugin_data[ 'author_name' ] : $data[ 'Author' ];
+		$plugin_data[ 'plugin_site' ] = empty( $data[ 'PluginURI' ] )
+			? ''
+			: '| <a href="' . $data[ 'PluginURI' ] . '">' . __(
+				'Visit plugin site'
+			) . '</a>';
+
+		return $plugin_data;
+	}
+
+	/**
+	 * Echo markup on list of each plugin
+	 *
+	 * @since  2014-10-15
+	 * @param  $plugin_file
+	 */
+	public function plugin_template( $plugin_file ) {
+
+		$plugin_data = $this->filter_plugin_data( $plugin_file );
+		?>
+
+		<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
+			<th scope="row" class="check-column"></th>
+			<td class="plugin-title">
+				<strong title="<?php echo esc_attr( $plugin_file ); ?>"><?php esc_attr_e( $plugin_data[ 'name' ] ); ?></strong>
+			</td>
+			<td class="column-description desc">
+				<div class="plugin-description"><p><?php _e( $plugin_data[ 'desc' ] ); ?></p></div>
+				<div class="active second plugin-version-author-uri">
+					<?php printf(
+						esc_attr__( 'Version %s | By %s %s' ),
+						$plugin_data[ 'version' ],
+						$plugin_data[ 'author' ],
+						$plugin_data[ 'plugin_site' ]
+					); ?>
+				</div>
+			</td>
+		</tr>
+
+	<?php
+	}
 	/**
 	 * Add rows for each sub-plugin under this plugin when listing mu-plugins in wp-admin
 	 *
 	 * @since   0.0.1
 	 * @return  void
 	 */
-	public function view_subdir_mu_plugins() {
-		
+	public function list_subdir_mu_plugins() {
+
 		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
-			
-			$data = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 
-			$name        = empty( $data['Name'] ) ? '?' : $data['Name'];
-			$desc        = empty( $data['Description'] ) ? '&nbsp;' : $data['Description'];
-			$version     = empty( $data['Version'] ) ? '' : $data['Version'];
-			$author_name = empty( $data['AuthorName'] ) ? '' : $data['AuthorName'];
-			$author      = empty( $data['Author'] ) ? $author_name : $data['Author'];
-			$author_uri  = empty( $data['AuthorURI'] ) ? '' : $data['AuthorURI'];
-			$plugin_site = empty( $data['PluginURI'] ) ? '' : '| <a href="' . $data['PluginURI'] . '">' . __( 'Visit plugin site' ) . '</a>';
-			$id          = sanitize_title( $plugin_file );
-
-			?>
-
-			<tr id="<?php echo $id; ?>" class="active">
-				<th scope="row" class="check-column"></th>
-				<td class="plugin-title">
-					<strong title="<?php echo $plugin_file; ?>"><?php echo $name; ?></strong>
-				</td>
-				<td class="column-description desc">
-					<div class="plugin-description"><p><?php echo $desc; ?></p></div>
-					<div class="active second plugin-version-author-uri">
-						<?php printf( esc_attr__( 'Version %s | By %s %s' ), $version, $author, $plugin_site ) ; ?>
-					</div>
-				</td>
-			</tr>
-
-			<?php
+			$this->plugin_template( $plugin_file );
 		}
 	}
 
