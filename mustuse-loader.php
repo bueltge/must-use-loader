@@ -328,12 +328,13 @@ class Must_Use_Plugins_Subdir_Loader {
 
 			// Sanitize fields
 			$allowed_tags = array(
-				'abbr'    => array( 'title' => true ),
-				'acronym' => array( 'title' => true ),
-				'code'    => true,
-				'em'      => true,
-				'strong'  => true,
-				'a'       => array( 'href' => true, 'title' => true ),
+				'abbr'    => array( 'title' => TRUE ),
+				'acronym' => array( 'title' => TRUE ),
+				'code'    => TRUE,
+				'em'      => TRUE,
+				'strong'  => TRUE,
+				'cite'    => TRUE,
+				'a'       => array( 'href' => TRUE, 'title' => TRUE ),
 			);
 			?>
 
