@@ -77,6 +77,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * Used for the doing of the plugin
 	 *
 	 * @since  0.0.1
+	 * @return void
 	 */
 	public function plugin_setup() {
 
@@ -100,9 +101,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * Validate the plugins from cache, that still real exist
 	 *
 	 * @since  2014-10-15
-	 *
 	 * @param  $plugins
-	 *
 	 * @return bool
 	 */
 	public function validate_plugins( $plugins ) {
@@ -264,7 +263,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function count_subdir_plugins() {
 
-		$this->mustuse_total = (int) count( $this->subdir_mu_plugins_files() );
+		$this->mustuse_total = intval( count( $this->subdir_mu_plugins_files() ) );
 	}
 
 	/**
