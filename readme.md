@@ -5,7 +5,7 @@ This small plugin scan and include all plugins in subdirectories from Must Use p
 The WordPress Must Use Plugins is an fine way to include without doings in back end. But WordPress does not load plugins in subdirectories, they must be at the root of the  Must Use plugin directory, on default `/wp-content/mu-plugins/`. This small plugin scan and include all plugins in subdirectories from Must Use plugin folder.
 
 ### Screenshots
-![List of Must Use Plugins, include the automatically loads in subdirectories](https://raw2.github.com/bueltge/Must-Use-Loader/master/assets/screenshot-1.png "List of Must Use Plugins, include the automatically loads in subdirectories")
+![List of Must Use Plugins, include the automatically loads in subdirectories](./assets/screenshot-1.png "List of Must Use Plugins, include the automatically loads in subdirectories")
 
 ## Installation
  1. Download the php file
