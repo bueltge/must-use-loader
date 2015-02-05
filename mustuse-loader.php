@@ -134,7 +134,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		$plugins = get_site_transient( 'subdir_wpmu_plugins' );
 
 		// Deactivate caching on active debug
-		if ( defined( 'WP_DEBUG1' ) && WP_DEBUG1 ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$plugins = FALSE;
 		}
 
