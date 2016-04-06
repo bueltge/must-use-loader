@@ -9,7 +9,7 @@
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
  * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
- * Version:     1.0.2
+ * Version:     1.1.0
  * Author:      Frank Bültge
  * Author URI:  http://bueltge.de
  * License:     GPL-2.0+
@@ -20,7 +20,7 @@
  * @package WordPress
  * @author  Frank Bültge <frank@bueltge.de>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 2015-02-07
+ * @version 2016-04-06
  */
  
 // If this file is called directly, abort.
@@ -88,11 +88,11 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function plugin_setup() {
 
-		// Include all plugins in subdirectories
-		$this->include_subdir_plugins();
-
 		// Delete transient cache, if active on the must use plugin list in network view
 		add_action( 'load-plugins.php', array( $this, 'delete_subdir_mu_plugin_cache' ) );
+
+		// Include all plugins in subdirectories
+		$this->include_subdir_plugins();
 
 		// Count must use plugins in subdirectory
 		add_action( 'load-plugins.php', array( $this, 'count_subdir_plugins' ), 10 );
@@ -108,14 +108,10 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * Validate the plugins from cache, that still real exist
 	 *
 	 * @since  2014-10-15
-	 * @param  $plugins
+	 * @param  bool|array $plugins
 	 * @return bool
 	 */
 	public function validate_plugins( $plugins ) {
-
-		if ( ! isset( $plugins ) || ! is_array( $plugins ) ) {
-			return $plugins;
-		}
 
 		foreach ( $plugins as $plugin_file ) {
 			// Validate plugins still exist
@@ -146,40 +142,52 @@ class Must_Use_Plugins_Subdir_Loader {
 		}
 
 		if ( FALSE !== $plugins ) {
-			$this->validate_plugins( $plugins );
+			$plugins = $this->validate_plugins( $plugins );
 		}
 
 		// No caching, then load
 		if ( FALSE === $plugins ) {
 
-			// get_plugins is not included by default
-			if ( ! function_exists( 'get_plugins' ) ) {
-				require ABSPATH . 'wp-admin/includes/plugin.php';
-			}
+			$plugins = $this->get_mu_plugins();
 
-			// Invalid cache
-			$plugins = array();
-
-			// Check for the optional defined var of the class
-			if ( ! self::$wpmu_plugin_dir ) {
-				// Relative path to single plugin directory
-				$mu_plugins_folder = explode( '/', WPMU_PLUGIN_DIR );
-				// Use last value
-				self::$wpmu_plugin_dir = '/../' . end( $mu_plugins_folder );
-			}
-
-			// Get all plugins
-			$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
-
-			// array_keys() is ugly and a performance impact
-			foreach ( $mu_plugins as $plugin_file => $not_used ) {
-				// skip files directly at root
-				if ( '.' !== dirname( $plugin_file ) ) {
-					$plugins[ ] = $plugin_file;
-				}
-			}
 			// Set cache for subdirectory plugins
 			set_site_transient( 'subdir_wpmu_plugins', $plugins );
+		}
+
+		return $plugins;
+	}
+
+	/**
+	 * Get all plugins from MU plugin directory.
+	 *
+	 * @return array
+	 */
+	public function get_mu_plugins() {
+
+		// Invalid cache
+		$plugins = array();
+
+		// Check for the optional defined var of the class
+		if ( ! self::$wpmu_plugin_dir ) {
+			// Relative path to single plugin directory
+			$mu_plugins_folder = explode( '/', WPMU_PLUGIN_DIR );
+			// Use last value
+			self::$wpmu_plugin_dir = '/../' . end( $mu_plugins_folder );
+		}
+
+		// get_plugins is not included by default
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		// Get all plugins
+		$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
+
+		// array_keys() is ugly and a performance impact
+		foreach ( $mu_plugins as $plugin_file => $not_used ) {
+			// skip files directly at root
+			if ( '.' !== dirname( $plugin_file ) ) {
+				$plugins[ ] = $plugin_file;
+			}
 		}
 
 		return $plugins;
@@ -213,8 +221,6 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		// Delete cache when viewing plugins page in /wp-admin/
 		if ( 'plugins-network' === $screen->id
-			&& isset( $_SERVER[ 'QUERY_STRING' ] )
-			&& 'plugin_status=mustuse' === $_SERVER[ 'QUERY_STRING' ]
 		) {
 			delete_site_transient( 'subdir_wpmu_plugins' );
 		}
@@ -249,10 +255,9 @@ class Must_Use_Plugins_Subdir_Loader {
 				value = parseInt( value.replace( ')', '' ) );
 
 				// replace and add strings
-				mustuse = value + <?php echo intval( $this->mustuse_total ); ?>;
+				mustuse = value + <?php echo (int) $this->mustuse_total; ?>;
 				$( selector ).replaceWith( '(' + mustuse + ')' );
 				mustuse = mustuse + ' <?php echo esc_attr( $item ); ?>';
-				console.log( document.URL.search( /mustuse/ ) );
 				if ( document.URL.search( /plugin_status=mustuse/ ) != -1 ) {
 					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
 				}
@@ -270,7 +275,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function count_subdir_plugins() {
 
-		$this->mustuse_total = intval( count( $this->subdir_mu_plugins_files() ) );
+		$this->mustuse_total = (int) count( $this->subdir_mu_plugins_files() );
 	}
 
 	/**
@@ -294,9 +299,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		);
 
 		$data        = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
-		$plugin_data = wp_parse_args( $data, $defaults );
-
-		return $plugin_data;
+		return wp_parse_args( $data, $defaults );
 	}
 
 	/**
@@ -310,7 +313,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function format_plugin_uri( $data ) {
 
-		if ( empty( $data ) ) {
+		if ( '' === $data ) {
 			return $data;
 		}
 
