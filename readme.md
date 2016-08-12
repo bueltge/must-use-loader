@@ -1,4 +1,6 @@
 # Must Use Loader
+[![Code Climate](https://codeclimate.com/github/bueltge/Must-Use-Loader/badges/gpa.svg)](https://codeclimate.com/github/bueltge/Must-Use-Loader) [![License](https://poser.pugx.org/bueltge/Must-Use-Loader/license)](https://packagist.org/packages/bueltge/Must-Use-Loader)
+
 This small plugin scan and include all plugins in subdirectories from Must Use plugin folder.
 
 ## Description
