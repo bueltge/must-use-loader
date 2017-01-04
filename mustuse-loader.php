@@ -126,11 +126,23 @@ class Must_Use_Plugins_Subdir_Loader {
 	}
 
 	/**
+	 * Retrieve the status of the WP Debug.
+	 *
+	 * @since  2017-01-04
+	 * @return bool
+	 */
+	public function get_debug_status() {
+
+		return defined( 'WP_DEBUG' ) && WP_DEBUG;
+	}
+
+	/**
 	 * Get all plugins in subdirectories
 	 * Write in a transient cache
 	 *
-	 * @since  0.0.1
-	 * @return array|bool|mixed
+	 * @since   0.0.1
+	 * @version 2017-01-04
+	 * @return  array
 	 */
 	public function subdir_mu_plugins_files() {
 
@@ -138,16 +150,12 @@ class Must_Use_Plugins_Subdir_Loader {
 		$plugins = get_site_transient( 'subdir_wpmu_plugins' );
 
 		// Deactivate caching on active debug
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$plugins = false;
-		}
-
-		if ( false !== $plugins ) {
+		if ( $this->get_debug_status() ) {
 			$plugins = $this->validate_plugins( $plugins );
 		}
 
 		// No caching, then load
-		if ( false === $plugins ) {
+		if ( $this->get_debug_status() ) {
 
 			$plugins = $this->get_mu_plugins();
 
@@ -203,7 +211,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	public function include_subdir_plugins() {
 
 		// Include all plugins in subdirectories
-		foreach ( (array) $this->subdir_mu_plugins_files() as $plugin_file ) {
+		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
 			require_once WPMU_PLUGIN_DIR . '/' . $plugin_file;
 			wp_register_plugin_realpath( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 		}
@@ -334,7 +342,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function list_subdir_mu_plugins() {
 
-		foreach ( (array) $this->subdir_mu_plugins_files() as $plugin_file ) {
+		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
 
 			$plugin_data = $this->filter_plugin_data( $plugin_file );
 
