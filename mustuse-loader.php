@@ -146,14 +146,6 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function subdir_mu_plugins_files() {
 
-		// Cache plugins
-		$plugins = get_site_transient( 'subdir_wpmu_plugins' );
-
-		// Deactivate caching on active debug
-		if ( $this->get_debug_status() ) {
-			$plugins = $this->validate_plugins( $plugins );
-		}
-
 		// No caching, then load
 		if ( $this->get_debug_status() ) {
 
@@ -161,6 +153,11 @@ class Must_Use_Plugins_Subdir_Loader {
 
 			// Set cache for subdirectory plugins
 			set_site_transient( 'subdir_wpmu_plugins', $plugins );
+		} else {
+			// Get cached plugins.
+			$plugins = get_site_transient( 'subdir_wpmu_plugins' );
+			// Debug is false, validate plugins from cache.
+			$plugins = $this->validate_plugins( $plugins );
 		}
 
 		return $plugins;
