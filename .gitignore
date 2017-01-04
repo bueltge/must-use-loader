@@ -6,6 +6,7 @@
 !/assets/*
 !mustuse*.php
 !readme.md
+!LICENSE
 
 ## Allow also .git-configurations
 !.gitignore

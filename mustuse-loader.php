@@ -8,21 +8,20 @@
  *
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
- * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
- * Version:     1.1.0
+ * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration. Version:     1.1.0
  * Author:      Frank Bültge
  * Author URI:  http://bueltge.de
- * License:     GPL-2.0+
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+ * License:     MIT
+ * License URI: LICENSE
  *
- * Php Version 5.3
+ * Php Version 7
  *
  * @package WordPress
  * @author  Frank Bültge <frank@bueltge.de>
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 2016-04-06
+ * @license MIT
+ * @version 2017-01-04
  */
- 
+
 // If this file is called directly, abort.
 if ( ! function_exists( 'add_filter' ) ) {
 	header( 'Status: 403 Forbidden' );
@@ -53,7 +52,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @since  0.0.2
 	 * @var    bool | string
 	 */
-	private static $wpmu_plugin_dir = FALSE;
+	private static $wpmu_plugin_dir = false;
 
 	/**
 	 * Store for the custom count to add this to the global of WP
@@ -108,7 +107,9 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * Validate the plugins from cache, that still real exist
 	 *
 	 * @since  2014-10-15
+	 *
 	 * @param  bool|array $plugins
+	 *
 	 * @return bool
 	 */
 	public function validate_plugins( $plugins ) {
@@ -116,7 +117,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		foreach ( $plugins as $plugin_file ) {
 			// Validate plugins still exist
 			if ( ! is_readable( WPMU_PLUGIN_DIR . '/' . $plugin_file ) ) {
-				$plugins = FALSE;
+				$plugins = false;
 				break;
 			}
 		}
@@ -138,15 +139,15 @@ class Must_Use_Plugins_Subdir_Loader {
 
 		// Deactivate caching on active debug
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$plugins = FALSE;
+			$plugins = false;
 		}
 
-		if ( FALSE !== $plugins ) {
+		if ( false !== $plugins ) {
 			$plugins = $this->validate_plugins( $plugins );
 		}
 
 		// No caching, then load
-		if ( FALSE === $plugins ) {
+		if ( false === $plugins ) {
 
 			$plugins = $this->get_mu_plugins();
 
@@ -186,7 +187,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		foreach ( $mu_plugins as $plugin_file => $not_used ) {
 			// skip files directly at root
 			if ( '.' !== dirname( $plugin_file ) ) {
-				$plugins[ ] = $plugin_file;
+				$plugins[] = $plugin_file;
 			}
 		}
 
@@ -202,8 +203,8 @@ class Must_Use_Plugins_Subdir_Loader {
 	public function include_subdir_plugins() {
 
 		// Include all plugins in subdirectories
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
-			require_once( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+		foreach ( (array) $this->subdir_mu_plugins_files() as $plugin_file ) {
+			require_once WPMU_PLUGIN_DIR . '/' . $plugin_file;
 			wp_register_plugin_realpath( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 		}
 	}
@@ -242,28 +243,28 @@ class Must_Use_Plugins_Subdir_Loader {
 		$item = sprintf( _n( 'item', 'items', $this->mustuse_total ), number_format_i18n( $this->mustuse_total ) );
 		?>
 		<script type="text/javascript">
-			jQuery( document ).ready( function( $ ) {
-				var text,
+			jQuery(document).ready(function ($) {
+				let text,
 					value,
 					mustuse,
 					selector;
 
 				// replace the brackets and set int value
 				selector = '.mustuse span';
-				text = $( selector ).text();
-				value = text.replace( '(', '' );
-				value = parseInt( value.replace( ')', '' ) );
+				text = $(selector).text();
+				value = text.replace('(', '');
+				value = parseInt(value.replace(')', ''));
 
 				// replace and add strings
 				mustuse = value + <?php echo (int) $this->mustuse_total; ?>;
-				$( selector ).replaceWith( '(' + mustuse + ')' );
+				$(selector).replaceWith('(' + mustuse + ')');
 				mustuse = mustuse + ' <?php echo esc_attr( $item ); ?>';
-				if ( document.URL.search( /plugin_status=mustuse/ ) != -1 ) {
-					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
+				if (document.URL.search(/plugin_status=mustuse/) != -1) {
+					$('.tablenav .displaying-num').replaceWith(mustuse);
 				}
-			} );
+			});
 		</script>
-	<?php
+		<?php
 	}
 
 	/**
@@ -298,7 +299,8 @@ class Must_Use_Plugins_Subdir_Loader {
 			'PluginURI'   => '',
 		);
 
-		$data        = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+		$data = get_plugin_data( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+
 		return wp_parse_args( $data, $defaults );
 	}
 
@@ -318,8 +320,8 @@ class Must_Use_Plugins_Subdir_Loader {
 		}
 
 		$plugin_uri = '| <a href="' . esc_url( $data ) . '">' . __(
-			'Visit plugin site'
-		) . '</a>';
+				'Visit plugin site'
+			) . '</a>';
 
 		return $plugin_uri;
 	}
@@ -332,19 +334,19 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function list_subdir_mu_plugins() {
 
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
+		foreach ( (array) $this->subdir_mu_plugins_files() as $plugin_file ) {
 
 			$plugin_data = $this->filter_plugin_data( $plugin_file );
 
 			// Sanitize fields
 			$allowed_tags = array(
-				'abbr'    => array( 'title' => TRUE ),
-				'acronym' => array( 'title' => TRUE ),
-				'code'    => TRUE,
-				'em'      => TRUE,
-				'strong'  => TRUE,
-				'cite'    => TRUE,
-				'a'       => array( 'href' => TRUE, 'title' => TRUE ),
+				'abbr'    => array( 'title' => true ),
+				'acronym' => array( 'title' => true ),
+				'code'    => true,
+				'em'      => true,
+				'strong'  => true,
+				'cite'    => true,
+				'a'       => array( 'href' => true, 'title' => true ),
 			);
 			?>
 
@@ -356,7 +358,8 @@ class Must_Use_Plugins_Subdir_Loader {
 						); ?></strong>
 				</td>
 				<td class="column-description desc">
-					<div class="plugin-description"><p><?php echo wp_kses( $plugin_data[ 'Description' ], $allowed_tags ); ?></p></div>
+					<div class="plugin-description">
+						<p><?php echo wp_kses( $plugin_data[ 'Description' ], $allowed_tags ); ?></p></div>
 					<div class="active second plugin-version-author-uri">
 						<?php printf(
 							esc_attr__( 'Version %s | By %s %s' ),
@@ -368,7 +371,7 @@ class Must_Use_Plugins_Subdir_Loader {
 				</td>
 			</tr>
 
-		<?php
+			<?php
 		}
 	}
 
