@@ -7,5 +7,6 @@
 !mustuse*.php
 !readme.md
 
-## Allow also .gitignore
+## Allow also .git-configurations
 !.gitignore
+!.gitattributes
