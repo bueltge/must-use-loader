@@ -364,7 +364,7 @@ class Must_Use_Plugins_Subdir_Loader {
 			);
 			?>
 
-			<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
+			<tr id="<?php echo sanitize_file_name( $plugin_file ); ?>" class="active">
 				<th scope="row" class="check-column"></th>
 				<td class="plugin-title">
 					<strong title="<?php echo esc_attr( $plugin_file ); ?>">
