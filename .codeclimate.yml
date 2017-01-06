@@ -1,0 +1,27 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - php
+  fixme:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: "WordPress"
+      ignore_warnings: true
+  phpmd:
+    enabled: true
+    checks:
+      Controversial/CamelCaseClassName:
+        enabled: false
+      Controversial/CamelCasePropertyName:
+        enabled: false
+      Controversial/CamelCaseVariableName:
+        enabled: false
+ratings:
+  paths:
+  - "**.php"
+xclude_paths: []
+  - "**/assets/**/*"

@@ -13,4 +13,4 @@
 !.gitattributes
 
 ## Allow codeclimate configuration
-.codeclimate.yml
+!.codeclimate.yml
