@@ -213,10 +213,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		// Get all plugins
 		$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
 
-		/**
-		 * array_keys() is ugly and a performance impact
-		 * WPCS: XSS OK
-		 */
+		// The function array_keys() is ugly and a performance impact.
 		foreach ( $mu_plugins as $plugin_file => $not_used ) {
 			// skip files directly at root
 			if ( '.' !== dirname( $plugin_file ) ) {
