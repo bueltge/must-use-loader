@@ -9,7 +9,8 @@ engines:
   phpcodesniffer:
     enabled: true
     config:
-      standard: "WordPress"
+      standard:
+        - "WordPress"
       ignore_warnings: true
   phpmd:
     enabled: true
@@ -22,6 +23,6 @@ engines:
         enabled: false
 ratings:
   paths:
-  - "**.php"
+    - "**.php"
 xclude_paths: []
   - "**/assets/**/*"
