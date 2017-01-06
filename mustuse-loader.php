@@ -61,7 +61,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @since  01/09/2014
 	 * @var    integer
 	 */
-	public $mustuse_total = 0;
+	private $mustuse_total = 0;
 
 	/**
 	 * Handler for the action 'init'. Instantiates this class.
@@ -113,7 +113,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 *
 	 * @return bool
 	 */
-	public function validate_plugins( $plugins ) {
+	private function validate_plugins( $plugins ) {
 
 		foreach ( $plugins as $plugin_file ) {
 			// Validate plugins still exist
@@ -132,7 +132,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @since  2017-01-04
 	 * @return bool
 	 */
-	public function get_debug_status() {
+	private function get_debug_status() {
 
 		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
@@ -233,8 +233,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		$screen = get_current_screen();
 
 		// Delete cache when viewing plugins page in /wp-admin/
-		if ( 'plugins-network' === $screen->id
-		) {
+		if ( 'plugins-network' === $screen->id ) {
 			delete_site_transient( 'subdir_wpmu_plugins' );
 		}
 	}
