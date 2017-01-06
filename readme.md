@@ -1,5 +1,5 @@
 # Must Use Loader
-[![Code Climate](https://codeclimate.com/github/bueltge/Must-Use-Loader/badges/gpa.svg)](https://codeclimate.com/github/bueltge/Must-Use-Loader) [![License](https://poser.pugx.org/bueltge/Must-Use-Loader/license)](https://packagist.org/packages/bueltge/Must-Use-Loader)
+[![Code Climate](https://codeclimate.com/github/bueltge/must-use-loader/badges/gpa.svg)](https://codeclimate.com/github/bueltge/must-use-loader) [![License](https://poser.pugx.org/bueltge/must-use-loader/license)](https://packagist.org/packages/bueltge/must-use-loader)
 
 This small plugin scan and include all plugins in subdirectories from Must Use plugin folder.
 
@@ -20,7 +20,7 @@ The plugin have a simple cache and you flush this cache if you go to the network
 #### Alternative via Git
  1. Go to your Must Use folder `cd path`
  2. `git init .`
- 3. `git remote add origin https://github.com/bueltge/Must-Use-Loader.git`
+ 3. `git remote add origin https://github.com/bueltge/must-use-loader.git`
  4. `git fetch origin`
  5. `git checkout master`
  6. Check in the network plugin page, if it works
@@ -37,7 +37,7 @@ define( 'WPMU_PLUGIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wpmu-plugins' )
 ## Other Notes
 ### Bugs, technical hints or contribute
 Please give me feedback, contribute and file technical bugs on this 
-[GitHub Repo](https://github.com/bueltge/Must-Use-Loader), use Issues.
+[GitHub Repo](https://github.com/bueltge/must-use-loader), use Issues.
 
 ### License
 Good news, this plugin is free for everyone! Since it's released under the [MIT](./LICENSE), you can use it free of charge on your personal or commercial blog. But if you enjoy this plugin, you can thank me and leave a 
