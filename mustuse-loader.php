@@ -213,7 +213,10 @@ class Must_Use_Plugins_Subdir_Loader {
 		// Get all plugins
 		$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
 
-		// array_keys() is ugly and a performance impact
+		/**
+		 * array_keys() is ugly and a performance impact
+		 * WPCS: XSS OK
+		 */
 		foreach ( $mu_plugins as $plugin_file => $not_used ) {
 			// skip files directly at root
 			if ( '.' !== dirname( $plugin_file ) ) {
@@ -364,7 +367,7 @@ class Must_Use_Plugins_Subdir_Loader {
 			);
 			?>
 
-			<tr id="<?php /** WPCS: XSS OK */ echo sanitize_file_name( $plugin_file ); ?>" class="active">
+			<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
 				<th scope="row" class="check-column"></th>
 				<td class="plugin-title">
 					<strong title="<?php echo esc_attr( $plugin_file ); ?>">
