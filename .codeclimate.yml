@@ -26,6 +26,8 @@ engines:
     checks:
       Controversial/CamelCaseClassName:
         enabled: false
+      Controversial/CamelCaseMethodName:
+        enabled: false
       Controversial/CamelCasePropertyName:
         enabled: false
       Controversial/CamelCaseParameterName:

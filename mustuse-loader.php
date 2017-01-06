@@ -139,7 +139,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * @since  2017-01-04
 	 * @return bool
 	 */
-	private function get_debug_status() {
+	private function is_debug_status() {
 
 		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
@@ -164,7 +164,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	public function subdir_mu_plugins_files() {
 
 		// No caching, then load
-		if ( $this->get_debug_status() ) {
+		if ( $this->is_debug_status() ) {
 
 			$plugins = $this->get_mu_plugins();
 
@@ -301,7 +301,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 *
 	 * @since  2014-10-15
 	 *
-	 * @param  $plugin_file
+	 * @param  string $plugin_file Plugin file name.
 	 *
 	 * @return array
 	 */
@@ -336,10 +336,7 @@ class Must_Use_Plugins_Subdir_Loader {
 			return $data;
 		}
 
-		$plugin_uri = '| <a href="' . esc_url( $data ) . '">' . __(
-				'Visit plugin site'
-			) . '</a>';
-
+		$plugin_uri = '| <a href="' . esc_url( $data ) . '">' . esc_html__( 'Visit plugin site' ) . '</a>';
 		return $plugin_uri;
 	}
 
@@ -370,19 +367,20 @@ class Must_Use_Plugins_Subdir_Loader {
 			<tr id="<?php echo sanitize_title( $plugin_file ); ?>" class="active">
 				<th scope="row" class="check-column"></th>
 				<td class="plugin-title">
-					<strong title="<?php echo esc_attr( $plugin_file ); ?>"><?php echo wp_kses(
-							$plugin_data[ 'Name' ], $allowed_tags
-						); ?></strong>
+					<strong title="<?php echo esc_attr( $plugin_file ); ?>">
+						<?php echo wp_kses( $plugin_data[ 'Name' ], $allowed_tags ); ?>
+					</strong>
 				</td>
 				<td class="column-description desc">
 					<div class="plugin-description">
-						<p><?php echo wp_kses( $plugin_data[ 'Description' ], $allowed_tags ); ?></p></div>
+						<p><?php echo wp_kses( $plugin_data[ 'Description' ], $allowed_tags ); ?></p>
+					</div>
 					<div class="active second plugin-version-author-uri">
 						<?php printf(
 							esc_attr__( 'Version %s | By %s %s' ),
 							wp_kses( $plugin_data[ 'Version' ], $allowed_tags ),
-							$plugin_data[ 'Author' ],
-							$this->format_plugin_uri( $plugin_data[ 'PluginURI' ] )
+							esc_attr( $plugin_data[ 'Author' ] ),
+							esc_url( $this->format_plugin_uri( $plugin_data[ 'PluginURI' ] ) )
 						); ?>
 					</div>
 				</td>
