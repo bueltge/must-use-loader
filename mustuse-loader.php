@@ -15,7 +15,7 @@
  * License:     MIT
  * License URI: LICENSE
  *
- * Php Version 7
+ * Php Version 5.6
  *
  * @package WordPress
  * @author  Frank Bültge <frank@bueltge.de>
