@@ -12,12 +12,23 @@ engines:
     config:
       standard: "WordPress"
       ignore_warnings: true
+    checks:
+      Generic PHP LowerCaseConstant Found:
+        enabled: false
+      Squiz Commenting InlineComment InvalidEndChar:
+        enabled: false
+      WordPress PHP YodaConditions:
+        enabled: false
+      WordPress Arrays ArrayKeySpacingRestrictions SpacesAroundArrayKeys:
+        enabled: false
   phpmd:
     enabled: true
     checks:
       Controversial/CamelCaseClassName:
         enabled: false
       Controversial/CamelCasePropertyName:
+        enabled: false
+      Controversial/CamelCaseParameterName:
         enabled: false
       Controversial/CamelCaseVariableName:
         enabled: false

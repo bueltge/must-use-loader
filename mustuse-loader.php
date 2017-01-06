@@ -116,7 +116,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 *
 	 * @since  2014-10-15
 	 *
-	 * @param  bool|array $plugins
+	 * @param  bool|array $plugins List of plugins.
 	 *
 	 * @return bool
 	 */
@@ -326,7 +326,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 *
 	 * @since  2014-10-15
 	 *
-	 * @param  $data
+	 * @param  string $data Url for each plugin link.
 	 *
 	 * @return string
 	 */
