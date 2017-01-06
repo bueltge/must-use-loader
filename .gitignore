@@ -1,5 +1,5 @@
 ## Disallow all
-**/
+*
 
 ## Allow
 !/assets
@@ -14,3 +14,5 @@
 
 ## Allow codeclimate configuration
 !.codeclimate.yml
+
+!composer.json
