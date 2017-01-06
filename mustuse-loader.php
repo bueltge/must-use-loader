@@ -19,7 +19,7 @@
  * @package WordPress
  * @author  Frank Bültge <frank@bueltge.de>
  * @license MIT
- * @version 2017-01-04
+ * @version 2017-01-06
  */
 
 // If this file is called directly, abort.
@@ -156,6 +156,12 @@ class Must_Use_Plugins_Subdir_Loader {
 		} else {
 			// Get cached plugins.
 			$plugins = get_site_transient( 'subdir_wpmu_plugins' );
+
+			// Refresh if the transient is wrong.
+			if ( ! $plugins ) {
+				$plugins = $this->get_mu_plugins();
+			}
+
 			// Debug is false, validate plugins from cache.
 			$plugins = $this->validate_plugins( $plugins );
 		}
