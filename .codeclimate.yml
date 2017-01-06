@@ -10,8 +10,7 @@ engines:
   phpcodesniffer:
     enabled: true
     config:
-      standard:
-        - "WordPress"
+      standard: "WordPress"
       ignore_warnings: true
   phpmd:
     enabled: true
