@@ -8,7 +8,8 @@
  *
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
- * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration. Version:     1.1.0
+ * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
+ * Version:     1.1.0
  * Author:      Frank Bültge
  * Author URI:  http://bueltge.de
  * License:     MIT

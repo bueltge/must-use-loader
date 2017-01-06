@@ -1,6 +1,6 @@
 {
   "name": "bueltge/must-use-loader",
-  "description": "",
+  "description": "Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.",
   "license": "MIT",
   "keywords": [
     "wordpress",
