@@ -11,3 +11,6 @@
 ## Allow also .git-configurations
 !.gitignore
 !.gitattributes
+
+## Allow codeclimate configuration
+.codeclimate.yml
