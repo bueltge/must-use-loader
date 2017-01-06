@@ -1,3 +1,4 @@
+# Validate for errors with http://www.yamllint.com/
 engines:
   duplication:
     enabled: true
