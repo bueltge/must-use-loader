@@ -64,6 +64,14 @@ class Must_Use_Plugins_Subdir_Loader {
 	private $mustuse_total = 0;
 
 	/**
+	 * Sore the plugin list, there we should load.
+	 *
+	 * @since 2017-01-06
+	 * @var   array
+	 */
+	private $plugins = array();
+
+	/**
 	 * Handler for the action 'init'. Instantiates this class.
 	 *
 	 * @since  0.0.1
@@ -91,11 +99,10 @@ class Must_Use_Plugins_Subdir_Loader {
 		// Delete transient cache, if active on the must use plugin list in network view
 		add_action( 'load-plugins.php', array( $this, 'delete_subdir_mu_plugin_cache' ) );
 
+		// Load plugins, count and store them.
+		$this->subdir_mu_plugins_files();
 		// Include all plugins in subdirectories
 		$this->include_subdir_plugins();
-
-		// Count must use plugins in subdirectory
-		add_action( 'load-plugins.php', array( $this, 'count_subdir_plugins' ), 10 );
 
 		// Change the plugin view value
 		add_action( 'admin_footer-plugins.php', array( $this, 'change_view_values' ), 11 );
@@ -138,12 +145,21 @@ class Must_Use_Plugins_Subdir_Loader {
 	}
 
 	/**
+	 * Get the data from transient.
+	 *
+	 * @return mixed
+	 */
+	private function get_transient() {
+
+		return get_site_transient( 'subdir_wpmu_plugins' );
+	}
+
+	/**
 	 * Get all plugins in subdirectories
 	 * Write in a transient cache
 	 *
 	 * @since   0.0.1
-	 * @version 2017-01-04
-	 * @return  array
+	 * @version 2017-01-06
 	 */
 	public function subdir_mu_plugins_files() {
 
@@ -156,7 +172,7 @@ class Must_Use_Plugins_Subdir_Loader {
 			set_site_transient( 'subdir_wpmu_plugins', $plugins );
 		} else {
 			// Get cached plugins.
-			$plugins = get_site_transient( 'subdir_wpmu_plugins' );
+			$plugins = $this->get_transient();
 
 			// Refresh if the transient is wrong.
 			if ( ! $plugins ) {
@@ -167,7 +183,9 @@ class Must_Use_Plugins_Subdir_Loader {
 			$plugins = $this->validate_plugins( $plugins );
 		}
 
-		return $plugins;
+		$this->plugins = $plugins;
+		// Set counter for plugins.
+		$this->mustuse_total = (int) count( $plugins );
 	}
 
 	/**
@@ -215,7 +233,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	public function include_subdir_plugins() {
 
 		// Include all plugins in subdirectories
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
+		foreach ( $this->plugins as $plugin_file ) {
 			require_once WPMU_PLUGIN_DIR . '/' . $plugin_file;
 			wp_register_plugin_realpath( WPMU_PLUGIN_DIR . '/' . $plugin_file );
 		}
@@ -279,18 +297,6 @@ class Must_Use_Plugins_Subdir_Loader {
 	}
 
 	/**
-	 * Count must use plugins in subdirectory
-	 * Set var with integer value
-	 *
-	 * @since   01/09/2014
-	 * @return  void
-	 */
-	public function count_subdir_plugins() {
-
-		$this->mustuse_total = (int) count( $this->subdir_mu_plugins_files() );
-	}
-
-	/**
 	 * Filter Plugin data for view on must use list
 	 *
 	 * @since  2014-10-15
@@ -345,7 +351,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 */
 	public function list_subdir_mu_plugins() {
 
-		foreach ( $this->subdir_mu_plugins_files() as $plugin_file ) {
+		foreach ( $this->plugins as $plugin_file ) {
 
 			$plugin_data = $this->filter_plugin_data( $plugin_file );
 
