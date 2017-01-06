@@ -377,7 +377,7 @@ class Must_Use_Plugins_Subdir_Loader {
 					</div>
 					<div class="active second plugin-version-author-uri">
 						<?php printf(
-							esc_attr__( 'Version %s | By %s %s' ),
+							esc_attr__( 'Version %1$s | By %2$s %3$s' ),
 							wp_kses( $plugin_data[ 'Version' ], $allowed_tags ),
 							esc_attr( $plugin_data[ 'Author' ] ),
 							esc_url( $this->format_plugin_uri( $plugin_data[ 'PluginURI' ] ) )
