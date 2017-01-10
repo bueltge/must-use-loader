@@ -236,7 +236,21 @@ class Must_Use_Plugins_Subdir_Loader {
 		foreach ( $this->plugins as $plugin_file ) {
 			require_once WPMU_PLUGIN_DIR . '/' . $plugin_file;
 			wp_register_plugin_realpath( WPMU_PLUGIN_DIR . '/' . $plugin_file );
+			// Currently not possible, WP validate plugins, there are active only via path WP_PLUGIN_DIR.
+			//$this->set_network_plugin_option( $plugin_file );
 		}
+	}
+
+	/**
+	 * Set network options for active plugins, necessary for checks of other plugin is network wide active.
+	 *
+	 * @param string $plugin File path.
+	 */
+	public function set_network_plugin_option( $plugin ) {
+
+		$current = get_site_option( 'active_sitewide_plugins', array() );
+		$current[ $plugin ] = time();
+		update_site_option( 'active_sitewide_plugins', $current );
 	}
 
 	/**
@@ -280,7 +294,7 @@ class Must_Use_Plugins_Subdir_Loader {
 
 				// replace the brackets and set int value
 				selector = '.mustuse span';
-				text = $(selector).text();
+				text = $( selector ).text();
 				value = text.replace('(', '');
 				value = parseInt(value.replace(')', ''));
 
