@@ -22,10 +22,16 @@ The plugin have a simple cache and you flush this cache if you go to the network
 
 ### Alternative via Composer
 The plugin is available as [Composer](https://getcomposer.org/) package and can be installed via Composer.
-`composer require bueltge/must-use-loader`
+
+```shell
+composer require bueltge/must-use-loader
+```
 
 Or to create as project in your environment.
-`composer create-project bueltge/must-use-loader --no-dev`.
+
+```shell
+composer create-project bueltge/must-use-loader --no-dev
+```
 
 The package is on [packagist](https://packagist.org/packages/bueltge/must-use-loader) and the package name is `bueltge/must-use-loader`.
 
