@@ -287,10 +287,10 @@ class Must_Use_Plugins_Subdir_Loader {
 		?>
 		<script type="text/javascript">
 			jQuery(document).ready(function ($) {
-				let text,
-					value,
-					mustuse,
-					selector;
+				var text;
+				var value;
+				var mustuse;
+				var selector;
 
 				// replace the brackets and set int value
 				selector = '.mustuse span';
