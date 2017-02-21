@@ -17,6 +17,14 @@ The plugin have a simple cache and you flush this cache if you go to the network
  3. Alternative define your Must Use folder in the `wp-config.php` and copy the plugin in this folder
  4. Check in the network plugin page, if it works
 
+### Alternative via Composer
+
+To install the package via composer
+
+```bash
+composer require "bueltge/must-use-loader"
+```
+
 #### Alternative via Git
  1. Go to your Must Use folder `cd path`
  2. `git init .`
