@@ -3,6 +3,7 @@
 
 This small plugin scan and include all plugins in subdirectories from Must Use plugin folder.
 
+
 ## Description
 The WordPress Must Use Plugins is an fine way to include without doings in back end. But WordPress does not load plugins in subdirectories, they must be at the root of the  Must Use plugin directory, on default `/wp-content/mu-plugins/`. This small plugin scan and include all plugins in subdirectories from Must Use plugin folder.
 
@@ -11,27 +12,37 @@ The plugin have a simple cache and you flush this cache if you go to the network
 ### Screenshots
 ![List of Must Use Plugins, include the automatically loads in subdirectories](./assets/screenshot-1.png "List of Must Use Plugins, include the automatically loads in subdirectories")
 
+
 ## Installation
+### Manual
  1. Download the php file
  2. Copy to your Must Use plugin folder, default `/wp-content/mu-plugins/`
  3. Alternative define your Must Use folder in the `wp-config.php` and copy the plugin in this folder
  4. Check in the network plugin page, if it works
 
 ### Alternative via Composer
+The plugin is available as [Composer](https://getcomposer.org/) package and can be installed via Composer.
 
-To install the package via composer
-
-```bash
-composer require "bueltge/must-use-loader"
+```shell
+composer require bueltge/must-use-loader
 ```
 
-#### Alternative via Git
+Or to create as project in your environment.
+
+```shell
+composer create-project bueltge/must-use-loader --no-dev
+```
+
+The package is on [packagist](https://packagist.org/packages/bueltge/must-use-loader) and the package name is `bueltge/must-use-loader`.
+
+### Alternative via Git
  1. Go to your Must Use folder `cd path`
  2. `git init .`
  3. `git remote add origin https://github.com/bueltge/must-use-loader.git`
  4. `git fetch origin`
  5. `git checkout master`
  6. Check in the network plugin page, if it works
+
 
 ## Custom Must Use Plugin directory
 Define it in the `wp-config.php` of your install, like the follow source.
@@ -41,6 +52,7 @@ Define it in the `wp-config.php` of your install, like the follow source.
 define( 'WPMU_PLUGIN_DIR', dirname( __FILE__ ) . '/wpmu-plugins' );
 define( 'WPMU_PLUGIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wpmu-plugins' );
 ```
+
 
 ## Other Notes
 ### Bugs, technical hints or contribute
@@ -53,7 +65,7 @@ Good news, this plugin is free for everyone! Since it's released under the [MIT]
 for the time I've spent writing and supporting this plugin. And I really don't want to know how many hours of my life this plugin has already eaten ;)
 
 ### Contact & Feedback
-The plugin is designed and developed by me ([Frank Bültge](http://bueltge.de), [Twitter](https://twitter.com/bueltge))
+The plugin is designed and developed by me ([Frank Bültge](https://bueltge.de), [Twitter](https://twitter.com/bueltge))
 
 Please let me know if you like the plugin or you hate it or whatever ... 
 Please fork it, add an issue for ideas and bugs.

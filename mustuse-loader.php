@@ -9,7 +9,7 @@
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
  * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
- * Version:     1.1.0
+ * Version:     1.1.1
  * Author:      Frank Bültge
  * Author URI:  http://bueltge.de
  * License:     MIT
@@ -20,7 +20,7 @@
  * @package WordPress
  * @author  Frank Bültge <frank@bueltge.de>
  * @license MIT
- * @version 2017-01-06
+ * @version 2017-02-21
  */
 
 // If this file is called directly, abort.
