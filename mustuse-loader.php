@@ -218,8 +218,9 @@ class Must_Use_Plugins_Subdir_Loader
 
         // The function array_keys() is ugly and a performance impact.
         foreach ($mu_plugins as $plugin_file => $not_used) {
-            // skip files directly at root
-            if ('.' !== dirname($plugin_file)) {
+            // Skip files directly at root
+            // And skip folders starting with an underscore as we want to turn those plugins off.
+            if ('.' !== dirname($plugin_file) && substr(dirname($plugin_file), 0, 1) !== '_') {
                 $plugins[] = $plugin_file;
             }
         }
@@ -235,7 +236,6 @@ class Must_Use_Plugins_Subdir_Loader
      */
     public function include_subdir_plugins()
     {
-
         // Include all plugins in subdirectories
         foreach ($this->plugins as $plugin_file) {
             require_once WPMU_PLUGIN_DIR . '/' . $plugin_file;
