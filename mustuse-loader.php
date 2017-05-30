@@ -30,8 +30,8 @@ if ( ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-if(!is_blog_installed()) {
-	return;
+if ( ! is_blog_installed() ) {
+ 	return;
 }
 
 add_action(
