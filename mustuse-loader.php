@@ -30,6 +30,10 @@ if ( ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
+if ( ! is_blog_installed() ) {
+ 	return;
+}
+
 add_action(
 	'muplugins_loaded',
 	[ Must_Use_Plugins_Subdir_Loader::get_instance(), 'plugin_setup' ]
