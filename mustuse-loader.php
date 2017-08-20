@@ -395,7 +395,7 @@ class Must_Use_Plugins_Subdir_Loader {
 						<?php printf(
 							esc_attr__( 'Version %1$s | By %2$s %3$s' ),
 							wp_kses( $plugin_data[ 'Version' ], $allowed_tags ),
-							esc_attr( $plugin_data[ 'Author' ] ),
+							wp_kses( $plugin_data[ 'Author' ], $allowed_tags ),
 							esc_url( $this->format_plugin_uri( $plugin_data[ 'PluginURI' ] ) )
 						); ?>
 					</div>
