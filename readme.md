@@ -1,5 +1,5 @@
 # Must Use Loader
-[![Code Climate](https://codeclimate.com/github/bueltge/must-use-loader/badges/gpa.svg)](https://codeclimate.com/github/bueltge/must-use-loader) [![License](https://poser.pugx.org/bueltge/must-use-loader/license)](https://packagist.org/packages/bueltge/must-use-loader)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a73ec78af2ea4026ffb1/maintainability)](https://codeclimate.com/github/bueltge/must-use-loader/maintainability) [![License](https://poser.pugx.org/bueltge/must-use-loader/license)](https://packagist.org/packages/bueltge/must-use-loader)
 
 This small plugin scan and include all plugins in subdirectories from Must Use plugin folder.
 
