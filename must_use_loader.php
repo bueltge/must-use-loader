@@ -271,6 +271,9 @@ class must_use_loader {
 
 		// get screen information
 		$screen = get_current_screen();
+		if ( null === $screen ) {
+			return;
+		}
 
 		// Delete cache when viewing plugins page in /wp-admin/
 		if ( 'plugins-network' === $screen->id ) {
@@ -287,17 +290,17 @@ class must_use_loader {
 	public function change_view_values() {
 
 		$current_screen = get_current_screen();
-		if ( 'plugins-network' !== $current_screen->id ) {
+		if ( null === $current_screen || 'plugins-network' !== $current_screen->id ) {
 			return;
 		}
 
 		$item = sprintf( _n( 'item', 'items', $this->mustuse_total ), number_format_i18n( $this->mustuse_total ) ); ?>
 		<script type="text/javascript">
-			( function( $ ) {
+			jQuery( document ).ready( function($) {
 				let text,
-				value,
-				mustuse,
-				selector;
+					value,
+					mustuse,
+					selector;
 
 				// replace the brackets and set int value
 				selector = '.mustuse span';
@@ -312,7 +315,7 @@ class must_use_loader {
 				if ( document.URL.search( /plugin_status=mustuse/ ) !== - 1 ) {
 					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
 				}
-			}( jQuery );
+			} );
 		</script>
 		<?php
 	}
