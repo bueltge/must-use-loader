@@ -4,7 +4,7 @@
 ## Allow
 !/assets
 !/assets/*
-!mustuse*.php
+!must_use_loader.php
 !readme.md
 !LICENSE
 

@@ -8,18 +8,19 @@
  * Plugin Name: Must-Use Loader
  * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
  * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
- * Version:     1.2.1
+ * Version:     1.3.0
+ * Text Domain: must_use_loader
  * Author:      Frank Bültge
  * Author URI:  https://bueltge.de
  * License:     MIT
- * License URI: LICENSE
+ * License URI: ./LICENSE
  *
  * Php Version 5.6
  *
  * @package WordPress
- * @author  Frank Bültge <frank@bueltge.de>
+ * @author  Frank Bültge <frank@bueltge.de>git pulll
  * @license MIT
- * @version 2017-07-01
+ * @version 2017-12-14
  */
 
 // If this file is called directly, abort.
@@ -36,21 +37,21 @@ if ( ! is_blog_installed() ) {
 
 add_action(
 	'muplugins_loaded',
-	[ Must_Use_Plugins_Subdir_Loader::get_instance(), 'plugin_setup' ]
+	[ must_use_loader::get_instance(), 'plugin_setup' ]
 );
 
 /**
- * Class Must_Use_Plugins_Subdir_Loader
+ * Class must_use_loader
  *
  * @since   0.0.1
  * @package Must-Use Loader
  * @author  Frank Bültge
  */
-class Must_Use_Plugins_Subdir_Loader {
+class must_use_loader {
 
 	/**
 	 * If the plugin fails to find your wpmu plugin directory,
-	 * add this path via variable
+	 * add this path via variable.
 	 * Optional, Relative path to single plugin folder.
 	 *
 	 * @since  0.0.2
@@ -78,7 +79,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	 * Handler for the action 'init'. Instantiates this class.
 	 *
 	 * @since  0.0.1
-	 * @return Must_Use_Plugins_Subdir_Loader
+	 * @return must_use_loader
 	 */
 	public static function get_instance() {
 
@@ -110,8 +111,8 @@ class Must_Use_Plugins_Subdir_Loader {
 		// Change the plugin view value
 		add_action( 'admin_footer-plugins.php', [ $this, 'change_view_values' ], 11 );
 
-		// Add row and content for all plugins, there include via this plugin
-		add_action( 'after_plugin_row_mustuse-loader.php', [ $this, 'list_subdir_mu_plugins' ] );
+		// Add row and content for all plugins, there include via this plugin.
+		add_action( 'after_plugin_row_must_use_loader.php', [ $this, 'list_subdir_mu_plugins' ] );
 	}
 
 	/**
@@ -219,7 +220,7 @@ class Must_Use_Plugins_Subdir_Loader {
 		foreach ( $mu_plugins as $plugin_file => $not_used ) {
 			// Skip files directly at root
 			// And skip folders starting with an underscore as we want to turn those plugins off.
-			if ( '.' !== dirname( $plugin_file ) && substr( dirname( $plugin_file ), 0, 1 ) !== '_' ) {
+			if ( '.' !== dirname( $plugin_file ) && dirname($plugin_file)[0] !== '_' ) {
 				$plugins[] = $plugin_file;
 			}
 		}
@@ -301,20 +302,19 @@ class Must_Use_Plugins_Subdir_Loader {
 				value = parseInt( value.replace( ')', '' ) );
 
 				// replace and add strings
-				mustuse = value + <?php echo (int) $this->mustuse_total; ?>;
+				mustuse = value + <?php echo $this->mustuse_total; ?>;
 				$( selector ).replaceWith( '(' + mustuse + ')' );
 				mustuse = mustuse + ' <?php echo esc_attr( $item ); ?>';
-				if ( document.URL.search( /plugin_status=mustuse/ ) != - 1 ) {
+				if ( document.URL.search( /plugin_status=mustuse/ ) !== - 1 ) {
 					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
 				}
 			} );
 		</script>
 		<?php
-
 	}
 
 	/**
-	 * Filter Plugin data for view on must use list
+	 * Filter Plugin data for view on must use list.
 	 *
 	 * @since  2014-10-15
 	 *
@@ -339,7 +339,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	}
 
 	/**
-	 * Format the plugin uri
+	 * Format the plugin uri.
 	 *
 	 * @since  2014-10-15
 	 *
@@ -359,7 +359,7 @@ class Must_Use_Plugins_Subdir_Loader {
 	}
 
 	/**
-	 * Add rows for each sub-plugin under this plugin when listing mu-plugins in wp-admin
+	 * Add rows for each sub-plugin under this plugin when listing mu-plugins in wp-admin.
 	 *
 	 * @since   0.0.1
 	 * @return  void
