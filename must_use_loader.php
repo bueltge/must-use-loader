@@ -214,7 +214,7 @@ class must_use_loader {
 			require ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// Get all plugins
-		$mu_plugins = get_plugins( self::$wpmu_plugin_dir );
+		$mu_plugins = apply_filters( 'must_use_loader.mu_plugins', get_plugins( self::$wpmu_plugin_dir ) );
 
 		// The function array_keys() is ugly and a performance impact.
 		foreach ( $mu_plugins as $plugin_file => $not_used ) {

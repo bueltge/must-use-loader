@@ -44,7 +44,8 @@ The package is on [packagist](https://packagist.org/packages/bueltge/must-use-lo
  6. Check in the network plugin page, if it works
 
 
-## Custom Must Use Plugin directory
+## Customization
+### Custom Must Use Plugin directory
 Define it in the `wp-config.php` of your install, like the follow source.
 
 ```php
@@ -53,6 +54,18 @@ define( 'WPMU_PLUGIN_DIR', dirname( __FILE__ ) . '/wpmu-plugins' );
 define( 'WPMU_PLUGIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wpmu-plugins' );
 ```
 
+### Exclude plugins from loader
+You can remove plugins detected by the "Must Use Loader" from the loading process by using the `must_use_loader.mu_plugins` filter.
+Example:
+```php
+function prefix_unset_autoloading( $mu_plugins ) {
+
+    unset($mu_plugins["plugin-folder/plugin-file.php"]);
+
+    return $mu_plugins;
+}
+add_filter( 'must_use_loader.mu_plugins', 'prefix_unset_autoloading' );
+```
 
 ## Other Notes
 ### Bugs, technical hints or contribute
