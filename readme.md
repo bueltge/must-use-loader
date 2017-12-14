@@ -60,8 +60,7 @@ Example:
 ```php
 function prefix_unset_autoloading( $mu_plugins ) {
 
-    unset($mu_plugins["plugin-folder/plugin-file.php"]);
-
+    unset( $mu_plugins['plugin-folder/plugin-file.php'] );
     return $mu_plugins;
 }
 add_filter( 'must_use_loader.mu_plugins', 'prefix_unset_autoloading' );

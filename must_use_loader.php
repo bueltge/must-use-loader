@@ -213,7 +213,11 @@ class must_use_loader {
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		// Get all plugins
+
+		/**
+		 * Get all plugins.
+		 * You can remove plugins detected by the "Must Use Loader" from the loading process by use the filter hook.
+		 */
 		$mu_plugins = apply_filters( 'must_use_loader.mu_plugins', get_plugins( self::$wpmu_plugin_dir ) );
 
 		// The function array_keys() is ugly and a performance impact.
