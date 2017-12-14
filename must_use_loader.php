@@ -6,20 +6,20 @@
  * This small plugin include all plugins in subdirectories
  *   from Must Use plugin folder
  * Plugin Name: Must-Use Loader
- * Plugin URI:  https://github.com/bueltge/Must-Use-Loader
+ * Plugin URI:  https://github.com/bueltge/must-use-loader
  * Description: Load Must-Use Plugins inside subdirectories with caching. For delete the cache: if you view the Must Use plugin list in the network administration.
  * Version:     1.3.0
  * Text Domain: must_use_loader
  * Author:      Frank Bültge
  * Author URI:  https://bueltge.de
  * License:     MIT
- * License URI: ./LICENSE
+ * License URI: https://opensource.org/licenses/MIT
  *
  * Php Version 5.6
  *
  * @package WordPress
- * @author  Frank Bültge <frank@bueltge.de>git pulll
- * @license MIT
+ * @author  Frank Bültge <frank@bueltge.de>
+ * @license https://opensource.org/licenses/MIT MIT
  * @version 2017-12-14
  */
 
