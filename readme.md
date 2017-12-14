@@ -55,7 +55,8 @@ define( 'WPMU_PLUGIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wpmu-plugins' )
 ```
 
 ### Exclude plugins from loader
-You can remove plugins detected by the "Must Use Loader" from the loading process by using the `must_use_loader.mu_plugins` filter.
+On default exclude the plugin all plugin files, there start with an underline `_`.
+But you can remove plugins detected by the "Must Use Loader" from the loading process by using the `must_use_loader.mu_plugins` filter.
 Example:
 ```php
 function prefix_unset_autoloading( $mu_plugins ) {

@@ -224,7 +224,7 @@ class must_use_loader {
 		foreach ( $mu_plugins as $plugin_file => $not_used ) {
 			// Skip files directly at root
 			// And skip folders starting with an underscore as we want to turn those plugins off.
-			if ( '.' !== dirname( $plugin_file ) && dirname($plugin_file)[0] !== '_' ) {
+			if ( '.' !== dirname( $plugin_file ) && dirname( $plugin_file )[0] !== '_' ) {
 				$plugins[] = $plugin_file;
 			}
 		}
@@ -293,7 +293,7 @@ class must_use_loader {
 
 		$item = sprintf( _n( 'item', 'items', $this->mustuse_total ), number_format_i18n( $this->mustuse_total ) ); ?>
 		<script type="text/javascript">
-			jQuery( document ).ready( function( $ ) {
+			( function( $ ) {
 				let text,
 				value,
 				mustuse,
@@ -312,7 +312,7 @@ class must_use_loader {
 				if ( document.URL.search( /plugin_status=mustuse/ ) !== - 1 ) {
 					$( '.tablenav .displaying-num' ).replaceWith( mustuse );
 				}
-			} );
+			}( jQuery );
 		</script>
 		<?php
 	}
