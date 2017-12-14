@@ -7,6 +7,7 @@
 !must_use_loader.php
 !readme.md
 !LICENSE
+!CHANGELOG.md
 
 ## Allow also .git-configurations
 !.gitignore
