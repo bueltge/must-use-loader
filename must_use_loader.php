@@ -294,10 +294,10 @@ class must_use_loader {
 		$item = sprintf( _n( 'item', 'items', $this->mustuse_total ), number_format_i18n( $this->mustuse_total ) ); ?>
 		<script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
-				var text;
-				var value;
-				var mustuse;
-				var selector;
+				let text,
+				value,
+				mustuse,
+				selector;
 
 				// replace the brackets and set int value
 				selector = '.mustuse span';
